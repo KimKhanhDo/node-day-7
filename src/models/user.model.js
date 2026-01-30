@@ -8,7 +8,7 @@ class User {
 
     async getUserById(id) {
         const [rows] = await pool.query(
-            'SELECT id, name, email, verified_at, created_at, updated_at FROM users WHERE id = ?',
+            'SELECT id, name, email, password, verified_at, created_at, updated_at FROM users WHERE id = ?',
             [id],
         );
 
@@ -41,6 +41,15 @@ class User {
         const [row] = await pool.query(
             'UPDATE users SET refresh_token = ?, refresh_expires_at = ? WHERE id = ?',
             [token, expiresAt, id],
+        );
+
+        return row.affectedRows > 0;
+    }
+
+    async updatePassword(userId, newPassword) {
+        const [row] = await pool.query(
+            'UPDATE users SET password = ? WHERE id = ?',
+            [newPassword, userId],
         );
 
         return row.affectedRows > 0;

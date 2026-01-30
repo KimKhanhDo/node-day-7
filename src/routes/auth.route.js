@@ -17,6 +17,9 @@ router.post(
     authController.resendVerifiedEmail,
 );
 
+// TODO
+router.post('/change-password', authRequired, authController.changePassword);
+
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/refresh-token', authController.refreshToken);

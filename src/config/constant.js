@@ -72,4 +72,11 @@ module.exports = {
         UNPROCESSABLE_ENTITY: 422,
         INTERNAL_SERVER_ERROR: 500,
     },
+
+    QUEUE_STATUS: {
+        PENDING: 'Pending',
+        IN_PROGRESS: 'inprogress',
+        COMPLETED: 'completed',
+        FAILED: 'failed',
+    },
 };

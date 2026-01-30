@@ -1,17 +1,17 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const userModel = require('@/models/user.model');
-const revokedTokenModel = require('@/models/revokedToken.model');
-const authService = require('@/services/auth.service');
 const {
     BCRYPT_SALT_ROUNDS,
     HTTP_STATUS,
     ERROR_MESSAGES,
     SUCCESS_MESSAGES,
 } = require('@/config/constant');
-const emailService = require('@/services/email.service');
+const userModel = require('@/models/user.model');
+const revokedTokenModel = require('@/models/revokedToken.model');
+const authService = require('@/services/auth.service');
 const { authSecret, verifyEmailSecret } = require('@/config/jwt');
+const queuesService = require('@/services/queues.service');
 
 const register = async (req, res) => {
     try {
@@ -33,9 +33,13 @@ const register = async (req, res) => {
         };
 
         // TODO: Gửi verify email
-        await emailService.sendVerifyEmail(newUser);
+        // await emailService.sendVerifyEmail(newUser);
 
         // TODO: queues: id, type, payload, status = pending/ inProgress/ completed/ failed, created_at, updated_at
+        queuesService.push({
+            type: 'sendVerifyEmail',
+            payload: newUser,
+        });
 
         res.success(newUser, HTTP_STATUS.CREATED);
     } catch (error) {
@@ -226,11 +230,108 @@ const resendVerifiedEmail = async (req, res) => {
         return res.error(HTTP_STATUS.BAD_REQUEST, 'Account is verified');
     }
 
-    await emailService.sendVerifyEmail(req.user);
+    // await emailService.sendVerifyEmail(req.user);
+
+    // TODO: queues: id, type, payload, status = pending/ inProgress/ completed/ failed, created_at, updated_at
+    queuesService.push({
+        type: 'sendVerifyEmail',
+        payload: {
+            id: req.user.id,
+            email: req.user.email,
+        },
+    });
+
     res.success(
         { message: 'Resend verify email successfully' },
         HTTP_STATUS.CREATED,
     );
+};
+
+const changePassword = async (req, res) => {
+    try {
+        const { password, newPassword, confirmedNewPassword } = req.body;
+
+        // 1. Validate input
+        if (!password || !newPassword || !confirmedNewPassword) {
+            return res.error(
+                HTTP_STATUS.BAD_REQUEST,
+                'All fields are required',
+            );
+        }
+
+        // 2. Kiểm tra mật khẩu cũ có đúng không
+        const isValidPassword = await bcrypt.compare(
+            password,
+            req.user.password,
+        );
+        if (!isValidPassword) {
+            return res.error(
+                HTTP_STATUS.UNAUTHORIZED,
+                ERROR_MESSAGES.UNAUTHORIZED,
+            );
+        }
+
+        // 3. Kiểm tra mật khẩu mới và confirm có khớp không
+        if (newPassword !== confirmedNewPassword) {
+            return res.error(
+                HTTP_STATUS.BAD_REQUEST,
+                'New password and confirmation do not match',
+            );
+        }
+
+        // 4. Kiểm tra mật khẩu mới không được giống mật khẩu cũ
+        const isSameAsOld = await bcrypt.compare(
+            newPassword,
+            req.user.password,
+        );
+        if (isSameAsOld) {
+            return res.error(
+                HTTP_STATUS.BAD_REQUEST,
+                'New password must be different from current password',
+            );
+        }
+
+        // 5. Hash mật khẩu mới
+        const hashedPassword = await bcrypt.hash(
+            newPassword,
+            BCRYPT_SALT_ROUNDS,
+        );
+
+        // 6. Update vào database
+        const updated = await userModel.updatePassword(
+            req.user.id,
+            hashedPassword,
+        );
+        if (!updated) {
+            return res.error(
+                HTTP_STATUS.INTERNAL_SERVER_ERROR,
+                'Failed to update password',
+            );
+        }
+
+        // Push job gửi email vào queue
+        queuesService.push({
+            type: 'sendPasswordChangeEmail',
+            payload: {
+                id: req.user.id,
+                name: req.user.name,
+                email: req.user.email,
+                changedAt: new Date().toISOString(),
+            },
+        });
+
+        return res.success(
+            { message: 'Password updated successfully' },
+            HTTP_STATUS.OK,
+        );
+    } catch (error) {
+        console.error('Change password error:', error);
+        return res.error(
+            HTTP_STATUS.INTERNAL_SERVER_ERROR,
+            ERROR_MESSAGES.INTERNAL_ERROR,
+            error,
+        );
+    }
 };
 
 module.exports = {
@@ -241,4 +342,5 @@ module.exports = {
     refreshToken,
     verifyEmail,
     resendVerifiedEmail,
+    changePassword,
 };

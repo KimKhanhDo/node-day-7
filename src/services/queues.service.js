@@ -3,7 +3,9 @@ const queueModel = require('@/models/queue.model');
 class QueueService {
     async push(job) {
         const { type, payload } = job;
-        await queueModel.createNewQueue(type, payload);
+
+        // Chuyển object thành JSON string và lưu vào DB
+        await queueModel.createNewQueue(type, JSON.stringify(payload));
     }
 }
 
