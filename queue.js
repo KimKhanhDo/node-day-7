@@ -28,7 +28,7 @@ const sleep = require('@/utils/sleep');
                     QUEUE_STATUS.IN_PROGRESS,
                 );
 
-                // await emailService.sendVerifyEmail(payload);
+                // await emailService.sendVerificationEmail(payload);
 
                 // Tìm handler tương ứng
                 const handler = tasks[type];

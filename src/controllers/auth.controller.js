@@ -33,11 +33,11 @@ const register = async (req, res) => {
         };
 
         // TODO: Gửi verify email
-        // await emailService.sendVerifyEmail(newUser);
+        // await emailService.sendVerificationEmail(newUser);
 
         // TODO: queues: id, type, payload, status = pending/ inProgress/ completed/ failed, created_at, updated_at
         queuesService.push({
-            type: 'sendVerifyEmail',
+            type: 'sendVerificationEmail',
             payload: newUser,
         });
 
@@ -230,11 +230,11 @@ const resendVerifiedEmail = async (req, res) => {
         return res.error(HTTP_STATUS.BAD_REQUEST, 'Account is verified');
     }
 
-    // await emailService.sendVerifyEmail(req.user);
+    // await emailService.sendVerificationEmail(req.user);
 
     // TODO: queues: id, type, payload, status = pending/ inProgress/ completed/ failed, created_at, updated_at
     queuesService.push({
-        type: 'sendVerifyEmail',
+        type: 'sendVerificationEmail',
         payload: {
             id: req.user.id,
             email: req.user.email,

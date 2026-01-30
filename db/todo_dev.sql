@@ -35,14 +35,14 @@ CREATE TABLE `queues` (
 -- Records of queues
 -- ----------------------------
 BEGIN;
-INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (1, 'sendVerifyEmail', '{\"id\":24,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'completed', NULL, NULL);
-INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (2, 'sendVerifyEmail', '{\"id\":25,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'failed', '2026-01-29 20:49:30', '2026-01-29 20:49:30');
-INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (3, 'sendVerifyEmail', '{\"id\":26,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'completed', '2026-01-29 20:50:20', '2026-01-29 20:50:20');
+INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (1, 'sendVerificationEmail', '{\"id\":24,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'completed', NULL, NULL);
+INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (2, 'sendVerificationEmail', '{\"id\":25,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'failed', '2026-01-29 20:49:30', '2026-01-29 20:49:30');
+INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (3, 'sendVerificationEmail', '{\"id\":26,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'completed', '2026-01-29 20:50:20', '2026-01-29 20:50:20');
 INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (4, 'sendPasswordChangeEmail', '{\"id\":26,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\",\"changedAt\":\"2026-01-30T00:19:10.965Z\"}', 'completed', '2026-01-30 11:19:10', '2026-01-30 11:19:10');
 INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (5, 'sendPasswordChangeEmail', '{\"id\":26,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\",\"changedAt\":\"2026-01-30T01:44:05.136Z\"}', 'completed', '2026-01-30 12:44:05', '2026-01-30 12:44:05');
-INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (6, 'sendVerifyEmail', '{\"id\":27,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'failed', '2026-01-30 12:51:05', '2026-01-30 12:51:05');
-INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (7, 'sendVerifyEmail', '{\"id\":28,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'completed', '2026-01-30 13:01:22', '2026-01-30 13:01:22');
-INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (8, 'sendVerifyEmail', '{\"id\":29,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'completed', '2026-01-30 13:03:29', '2026-01-30 13:03:29');
+INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (6, 'sendVerificationEmail', '{\"id\":27,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'failed', '2026-01-30 12:51:05', '2026-01-30 12:51:05');
+INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (7, 'sendVerificationEmail', '{\"id\":28,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'completed', '2026-01-30 13:01:22', '2026-01-30 13:01:22');
+INSERT INTO `queues` (`id`, `type`, `payload`, `status`, `created_at`, `updated_at`) VALUES (8, 'sendVerificationEmail', '{\"id\":29,\"name\":\"Kim\",\"email\":\"kim.do2709@gmail.com\"}', 'completed', '2026-01-30 13:03:29', '2026-01-30 13:03:29');
 COMMIT;
 
 -- ----------------------------

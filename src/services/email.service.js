@@ -3,7 +3,7 @@ const authService = require('./auth.service');
 const { verifyEmailSecret } = require('@/config/jwt');
 
 class EmailService {
-    async sendVerifyEmail(user) {
+    async sendVerificationEmail(user) {
         const token = authService.createAccessToken(user, verifyEmailSecret);
 
         const clientUrl =
